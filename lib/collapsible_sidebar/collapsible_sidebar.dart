@@ -188,12 +188,10 @@ class _CollapsibleSideBarState extends State<CollapsibleSideBar>
   }
 
   List<Widget> get _items {
-    CollapsibleItem item;
-    Color iconColor, textColor;
     return List.generate(widget.items.length, (index) {
-      item = widget.items[index];
-      iconColor = widget.unselectedIconColor;
-      textColor = widget.unselectedTextColor;
+      var item = widget.items[index];
+      var iconColor = widget.unselectedIconColor;
+      var textColor = widget.unselectedTextColor;
       if (item.isSelected) {
         iconColor = widget.selectedIconColor;
         textColor = widget.selectedTextColor;
@@ -210,10 +208,10 @@ class _CollapsibleSideBarState extends State<CollapsibleSideBar>
         title: item.title,
         textStyle: _textStyle(textColor),
         onTap: () {
-          if (_selectedItemIndex == index) return;
+          if (item.isSelected) return;
           item.onPressed();
+          item.isSelected = true;
           widget.items[_selectedItemIndex].isSelected = false;
-          widget.items[index].isSelected = true;
           setState(() => _selectedItemIndex = index);
         },
       );
