@@ -3,8 +3,8 @@ import 'dart:math' as math show pi;
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 
-import './collapsible_side_bar/item.dart';
-import './collapsible_side_bar/collapsible_side_bar.dart';
+import './collapsible_sidebar/collapsible_sidebar.dart';
+import './collapsible_sidebar/collapsible_item.dart';
 
 void main() => runApp(MyApp());
 
@@ -28,54 +28,49 @@ class SidebarPage extends StatefulWidget {
 }
 
 class _SidebarPageState extends State<SidebarPage> {
-  List<Item> _items;
-  String pageTitle;
+  List<CollapsibleItem> _items;
+  String _headline;
 
   @override
   void initState() {
     super.initState();
     _items = _generateItems;
-    for (var item in _items)
-      if (item.isSelected) {
-        pageTitle = item.title;
-        break;
-      }
+    _headline = _items.firstWhere((item) => item.isSelected).title;
   }
 
-  List<Item> get _generateItems {
+  List<CollapsibleItem> get _generateItems {
     return [
-      Item(
+      CollapsibleItem(
         title: 'Dashboard',
         icon: Icons.assessment,
-        onPressed: () => setState(() => pageTitle = 'DashBoard'),
+        onPressed: () => setState(() => _headline = 'DashBoard'),
       ),
-      Item(
+      CollapsibleItem(
         title: 'Errors',
         icon: Icons.cancel,
-        onPressed: () => setState(() => pageTitle = 'Errors'),
+        onPressed: () => setState(() => _headline = 'Errors'),
         isSelected: true,
       ),
-      Item(
+      CollapsibleItem(
         title: 'Search',
         icon: Icons.search,
-        onPressed: () => setState(() => pageTitle = 'Search'),
+        onPressed: () => setState(() => _headline = 'Search'),
       ),
-      Item(
+      CollapsibleItem(
         title: 'Notifications',
         icon: Icons.notifications,
-        onPressed: () => setState(() => pageTitle = 'Notifications'),
+        onPressed: () => setState(() => _headline = 'Notifications'),
       ),
-      Item(
+      CollapsibleItem(
         title: 'Settings',
         icon: Icons.settings,
-        onPressed: () => setState(() => pageTitle = 'Settings'),
+        onPressed: () => setState(() => _headline = 'Settings'),
       ),
     ];
   }
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIOverlays([]);
     var size = MediaQuery.of(context).size;
     return Stack(
       alignment: Alignment.topLeft,
@@ -83,7 +78,7 @@ class _SidebarPageState extends State<SidebarPage> {
         _body(size, context),
         Padding(
           padding: EdgeInsets.all(4),
-          child: _sideBar(context, size.width),
+          child: _createSidebar(context, size.width),
         ),
       ],
     );
@@ -100,7 +95,7 @@ class _SidebarPageState extends State<SidebarPage> {
           child: Transform.translate(
             offset: Offset(-size.height * 0.2, -size.width * 0.3),
             child: Text(
-              pageTitle,
+              _headline,
               style: Theme.of(context).textTheme.headline1,
               overflow: TextOverflow.visible,
               softWrap: false,
@@ -111,7 +106,7 @@ class _SidebarPageState extends State<SidebarPage> {
     );
   }
 
-  Widget _sideBar(BuildContext context, double width) {
+  Widget _createSidebar(BuildContext context, double width) {
     return CollapsibleSideBar(
       maxWidth: width * 0.75,
       items: _items,
