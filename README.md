@@ -2,6 +2,8 @@
 
 A new Flutter project.
 
+Collapsible Side bar: https://dribbble.com/shots/5787044-sidebar-icons
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
